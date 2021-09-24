@@ -6,6 +6,7 @@ const refs = {
   modal: document.querySelector('.js-lightbox'),
   modalImg: document.querySelector('.lightbox__image'),
   closeBtn: document.querySelector('.lightbox__button'),
+  overlay: document.querySelector('.lightbox__overlay'),
 };
 // добавление в HTML
 const renderGallery = function (galleryItems) {
@@ -31,6 +32,7 @@ renderGallery(galleryItems);
 refs.gallery.addEventListener('click', openModal);
 
 function openModal(event) {
+  window.addEventListener('keydown', onEscKeyPress);
   event.preventDefault();
   if (event.target.nodeName !== 'IMG') {
     return;
@@ -42,11 +44,21 @@ function openModal(event) {
     refs.modalImg.alt = event.target.alt;
   }
 }
-// закрытие модалки по х
+// закрытие модалки по Btn, overlay, Escape
 refs.closeBtn.addEventListener('click', closeModal);
+refs.overlay.addEventListener('click', closeModal);
 
 function closeModal() {
+  window.removeEventListener('keydown', onEscKeyPress);
   refs.modal.classList.remove('is-open');
   refs.modalImg.src = '';
   refs.modalImg.alt = '';
 }
+
+function onEscKeyPress(event) {
+  const isEscKey = event.code === 'Escape';
+  if (isEscKey) {
+    closeModal();
+  }
+}
+//
